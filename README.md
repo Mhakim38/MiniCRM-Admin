@@ -1,58 +1,281 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini CRM Admin Panel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 13 CRUD application for managing Companies and Employees with authentication, API endpoints, and professional UI built with Tailwind CSS.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- ✅ **Authentication** - Admin login with Breeze
+- ✅ **CRUD Operations** - Create, Read, Update, Delete for Companies & Employees
+- ✅ **Database Validation** - FormRequest validation classes
+- ✅ **Pagination** - 10 items per page
+- ✅ **Logo Storage** - Upload and store company logos in public storage
+- ✅ **API Endpoints** - RESTful API with employee count attribute
+- ✅ **Responsive UI** - Tailwind CSS styling
+- ✅ **Eloquent Relationships** - Companies → Employees relationships
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.5+
+- MySQL 5.7+
+- Node.js & npm
+- Composer
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone & Setup
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cd holeeMonth/MiniCRM-Admin
+composer install
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Environment Configuration
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Update `.env` with your database credentials:**
 
-## Code of Conduct
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=minicrm_admin
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Database Setup
 
-## Security Vulnerabilities
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This creates:
+- Users table with admin seeder
+- Companies table
+- Employees table
+
+### 4. Create Storage Symlink
+
+```bash
+php artisan storage:link
+```
+
+This enables public access to uploaded logos.
+
+### 5. Build Frontend Assets
+
+```bash
+npm run build
+```
+
+For development with live reload:
+
+```bash
+npm run dev
+```
+
+### 6. Start the Application
+
+```bash
+php artisan serve
+```
+
+The app will be available at: **http://127.0.0.1:8000**
+
+## Default Admin Credentials
+
+- **Email:** `admin@admin.com`
+- **Password:** `password`
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/
+│   ├── CompanyController.php      # CRUD for companies
+│   └── EmployeeController.php     # CRUD for employees
+├── Http/Requests/
+│   ├── StoreCompanyRequest.php    # Validation for create
+│   ├── UpdateCompanyRequest.php   # Validation for update
+│   ├── StoreEmployeeRequest.php   # Validation for create
+│   └── UpdateEmployeeRequest.php  # Validation for update
+└── Models/
+    ├── Company.php                # Company model with relationships
+    └── Employee.php               # Employee model with relationships
+
+database/
+├── migrations/
+│   ├── create_companies_table.php
+│   └── create_employees_table.php
+└── seeders/
+    └── UserSeeder.php             # Seeds admin user
+
+resources/views/
+├── companies/                      # Company CRUD views
+│   ├── index.blade.php
+│   ├── create.blade.php
+│   ├── edit.blade.php
+│   └── show.blade.php
+├── employees/                      # Employee CRUD views
+│   ├── index.blade.php
+│   ├── create.blade.php
+│   ├── edit.blade.php
+│   └── show.blade.php
+└── layouts/
+    └── navigation.blade.php       # Navigation with links
+
+routes/
+├── web.php                        # Web routes for CRUD
+└── api.php                        # API routes
+```
+
+## Database Schema
+
+### Companies Table
+- `id` - Primary key
+- `name` - Company name (required)
+- `email` - Company email (optional)
+- `logo` - Logo path in storage/app/public (optional, min 100x100)
+- `website` - Company website URL (optional)
+- `timestamps` - Created/updated timestamps
+
+### Employees Table
+- `id` - Primary key
+- `first_name` - First name (required)
+- `last_name` - Last name (required)
+- `company_id` - Foreign key to companies (required)
+- `email` - Employee email (optional)
+- `phone` - Employee phone (optional)
+- `timestamps` - Created/updated timestamps
+
+## Web Routes
+
+### Companies
+- `GET /companies` - List all companies (paginated, 10/page)
+- `GET /companies/create` - Show create form
+- `POST /companies` - Store new company
+- `GET /companies/{id}` - Show company details
+- `GET /companies/{id}/edit` - Show edit form
+- `PUT /companies/{id}` - Update company
+- `DELETE /companies/{id}` - Delete company
+
+### Employees
+- `GET /employees` - List all employees (paginated, 10/page)
+- `GET /employees/create` - Show create form
+- `POST /employees` - Store new employee
+- `GET /employees/{id}` - Show employee details
+- `GET /employees/{id}/edit` - Show edit form
+- `PUT /employees/{id}` - Update employee
+- `DELETE /employees/{id}` - Delete employee
+
+## API Endpoints
+
+### Get Company with Employees
+
+**Request:**
+```http
+GET /api/companies/{id}
+```
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "Tech Corp",
+  "email": "contact@techcorp.com",
+  "website": "https://techcorp.com",
+  "logo": "logos/abc123.jpg",
+  "employee_count": 3,
+  "employees": [
+    {
+      "id": 1,
+      "first_name": "John",
+      "last_name": "Doe",
+      "company_id": 1,
+      "email": "john@techcorp.com",
+      "phone": "1234567890"
+    },
+    ...
+  ]
+}
+```
+
+## Testing with Postman
+
+1. **Open Postman**
+2. **Create a new request:**
+   - Method: `GET`
+   - URL: `http://127.0.0.1:8000/api/companies/1`
+3. **Click Send**
+
+You should receive JSON with company data and employee count.
+
+## Validation Rules
+
+### Company Validation
+- `name` - Required, string
+- `email` - Optional, valid email format
+- `logo` - Optional, image file, minimum 100x100 pixels
+- `website` - Optional, valid URL
+
+### Employee Validation
+- `first_name` - Required, string
+- `last_name` - Required, string
+- `company_id` - Required, must exist in companies table
+- `email` - Optional, valid email format
+- `phone` - Optional, string
+
+## Features Walkthrough
+
+### Adding a Company
+1. Navigate to **Companies** in navbar
+2. Click **+ Add Company**
+3. Fill in details (Name is required)
+4. Upload logo (optional, min 100x100)
+5. Click **Create**
+
+### Adding an Employee
+1. Navigate to **Employees** in navbar
+2. Click **+ Add Employee**
+3. Select company from dropdown (required)
+4. Fill in first/last names (required)
+5. Add email and phone (optional)
+6. Click **Create**
+
+### Viewing Company Details
+1. Go to **Companies** list
+2. Click **View** on any company
+3. See all company info and associated employees
+4. Click **Edit Company** or **View Company** as needed
+
+## Troubleshooting
+
+### Logos not displaying?
+```bash
+php artisan storage:link
+```
+
+### CSS not working?
+```bash
+npm run build
+```
+
+### Database connection error?
+- Check `.env` database credentials
+- Ensure MySQL is running
+- Run `php artisan migrate`
+
+### 404 on /api/companies/{id}?
+- Check the company ID exists in database
+- Verify database migrations ran successfully
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open source and available under the MIT license.
+
